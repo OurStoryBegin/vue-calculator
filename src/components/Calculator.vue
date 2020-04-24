@@ -3,7 +3,7 @@
     <div class="display"><p>{{ formula || 0}}</p></div>
     <div @click="clear" class="nan">AC</div>
     <div @click="backspace" class="nan"><b-icon-backspace></b-icon-backspace></div>
-    <div class="percentage nan">%</div>
+    <div @click="percentage" class="nan">%</div>
     <div class="nan">/</div>
     <div @click="append('7')" >7</div>
     <div @click="append('8')">8</div>
@@ -40,6 +40,9 @@ export default {
     },
     backspace() {
       this.formula = this.formula.slice(0, -1)
+    },
+    percentage() {
+      this.formula = String(parseFloat(this.formula) / 100)
     }
 
   }
