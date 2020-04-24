@@ -1,7 +1,7 @@
 <template>
   <div class="calculator">
-    <div class="display"><p>0.60000000018</p></div>
-    <div class="clear nan">AC</div>
+    <div class="display"><p>{{ result || 0}}</p></div>
+    <div @click="clear" class="nan">AC</div>
     <div class="backspace nan"><b-icon-backspace></b-icon-backspace></div>
     <div class="percentage nan">%</div>
     <div class="nan">/</div>
@@ -26,7 +26,16 @@
 
 <script>
 export default {
-
+  data() {
+    return {
+      result: null
+    }
+  },
+  methods: {
+    clear() {
+      this.result = null
+    }
+  }
 }
 </script>
 
