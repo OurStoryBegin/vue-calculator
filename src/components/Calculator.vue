@@ -5,21 +5,21 @@
     <div class="backspace nan"><b-icon-backspace></b-icon-backspace></div>
     <div class="percentage nan">%</div>
     <div class="nan">/</div>
-    <div>7</div>
-    <div>8</div>
-    <div>9</div>
+    <div @click="append('7')" >7</div>
+    <div @click="append('8')">8</div>
+    <div @click="append('9')">9</div>
     <div class="nan">*</div>
-    <div>4</div>
-    <div>5</div>
-    <div>6</div>
+    <div @click="append('4')">4</div>
+    <div @click="append('5')">5</div>
+    <div @click="append('6')">6</div>
     <div class="nan">-</div>
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>
+    <div @click="append('1')">1</div>
+    <div @click="append('2')">2</div>
+    <div @click="append('3')">3</div>
     <div class="nan">+</div>
     <div class="transform"><b-icon-arrow-repeat></b-icon-arrow-repeat></div>
-    <div>0</div>
-    <div class="dot">.</div>
+    <div @click="append('0')">0</div>
+    <div @click="append('.')" class="dot">.</div>
     <div class="nan">=</div>
   </div>
 </template>
@@ -28,13 +28,17 @@
 export default {
   data() {
     return {
-      result: null
+      result: ''
     }
   },
   methods: {
     clear() {
-      this.result = null
+      this.result = ''
+    },
+    append(operand) {
+      this.result += operand
     }
+
   }
 }
 </script>
