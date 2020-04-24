@@ -1,8 +1,8 @@
 <template>
   <div class="calculator">
-    <div class="display"><p>{{ result || 0}}</p></div>
+    <div class="display"><p>{{ formula || 0}}</p></div>
     <div @click="clear" class="nan">AC</div>
-    <div class="backspace nan"><b-icon-backspace></b-icon-backspace></div>
+    <div @click="backspace" class="nan"><b-icon-backspace></b-icon-backspace></div>
     <div class="percentage nan">%</div>
     <div class="nan">/</div>
     <div @click="append('7')" >7</div>
@@ -28,15 +28,18 @@
 export default {
   data() {
     return {
-      result: ''
+      formula: ''
     }
   },
   methods: {
     clear() {
-      this.result = ''
+      this.formula = ''
     },
     append(operand) {
-      this.result += operand
+      this.formula += operand
+    },
+    backspace() {
+      this.formula = this.formula.slice(0, -1)
     }
 
   }
