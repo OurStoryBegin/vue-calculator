@@ -41,6 +41,7 @@ export default {
       formula: '',
       equalClicked: false,
       formulaHistory: [],
+      // currentOperand: ''
       // percentaged: false
       // operator: null,
       // operatorClicked: false,
@@ -65,17 +66,32 @@ export default {
       let result = (Function("return " + tmp))()
       if(Number.isNaN(result) || result === Infinity) result = "Can't divide by zero"
       return result
-    }
+    },
+    zeroStart() {
+      let out = false
+      if(this.formula.length > 2 && this.formula.slice(-1) === '0') {
+        switch (this.formula.slice(-2, -1))
+        {
+          case String.fromCharCode(247):
+          case String.fromCharCode(215):
+          case String.fromCharCode(8722):
+          case String.fromCharCode('+'):
+            out = true
+            break;
+        }
+      }
+      return out
+    },
   },
   methods: {
     operatorEnd(formula) {
       let end = formula.slice(-1)
       let out = false
       switch (end) {
-        case '+':
-        case String.fromCharCode(247):
-        case String.fromCharCode(215):
-        case String.fromCharCode(8722):
+        case '+':                       // plus
+        case String.fromCharCode(247):  // divide
+        case String.fromCharCode(215):  // multiply
+        case String.fromCharCode(8722):  // minus
           out = true;
           break;
       }
@@ -89,6 +105,7 @@ export default {
       // this.formulaEndNan = false
     },
     append(operand) {
+      if(this.zeroStart) return
       if(this.formula === '' && operand === '0') {
         this.formula = ''
       } else {
