@@ -25,8 +25,8 @@
       <div @click="append('1')">1</div>
       <div @click="append('2')">2</div>
       <div @click="append('3')">3</div>
-      <div @click="add" class="nan">+</div>
-      <div @click="append('0')" class="zero">0</div>
+      <div @click="add" class="nan plus">+</div>
+      <div @click="append('0')">0</div>
       <div @click="dot('.')" class="dot">.</div>
       <div @click="equal" class="nan">=</div>
     </div>
@@ -268,12 +268,9 @@ export default {
     border-radius: 50%;
   }
 
-  .zero {
-    grid-column: 1 / 3;
-  }
-  .zero:hover {
-    border-radius: 0px;
-    padding: 0;
+  .plus {
+    grid-column: 4 / 5;
+    grid-row: 4 /6;
   }
 
   .nan {
