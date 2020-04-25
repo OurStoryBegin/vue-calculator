@@ -115,7 +115,7 @@ export default {
     append(operand) {
       if(this.equalClicked) {
         this.formulaHistory.push(this.formula + '=' + this.result)
-        this.formula = String(this.result)
+        this.formula = ''
       }
 
       if(this.zeroStart) return
