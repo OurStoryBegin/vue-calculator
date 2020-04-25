@@ -2,7 +2,7 @@
   <div class="calculator">
     <div class="display">
       <div class="history">
-        <p v-for="log in formulaHistory"
+        <p v-for="log in reverseLogs"
             :key="log"
         >{{log}}</p>
       </div>
@@ -82,7 +82,15 @@ export default {
       }
       return out
     },
+    reverseLogs() {
+      return this.formulaHistory.slice().reverse()
+    }
   },
+  // filters: {
+  //   reverseLogs(value) {
+
+  //   }
+  // },
   methods: {
     operatorEnd(formula) {
       let end = formula.slice(-1)
@@ -105,6 +113,11 @@ export default {
       // this.formulaEndNan = false
     },
     append(operand) {
+      if(this.equalClicked) {
+        this.formulaHistory.push(this.formula + '=' + this.result)
+        this.formula = String(this.result)
+      }
+
       if(this.zeroStart) return
       if(this.formula === '' && operand === '0') {
         this.formula = ''
