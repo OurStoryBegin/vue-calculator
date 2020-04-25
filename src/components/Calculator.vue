@@ -121,7 +121,8 @@ export default {
       if(this.formula === '') {
         this.formula = '0.'
       }
-      if(this.formula.indexOf('.') === -1) {
+
+      if(!(/(\d)*\.(\d)*$/.test(this.formula))) {
         this.formula += dot
       }
       this.equalClicked = false
