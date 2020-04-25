@@ -1,6 +1,11 @@
 <template>
   <div class="calculator">
     <div class="display">
+      <div class="history">
+        <p v-for="log in formulaHistory"
+            :key="log"
+        >{{log}}</p>
+      </div>
       <p class="formulaStyle" :class="{focusOn: !equalClicked}">{{ formula }}</p>
       <p class="resultStyle" :class="{focusOn: equalClicked}">{{formula ? '=' : ''}}{{ result || 0}}</p>
     </div>
@@ -21,8 +26,7 @@
       <div @click="append('2')">2</div>
       <div @click="append('3')">3</div>
       <div @click="add" class="nan">+</div>
-      <div class="transform"><b-icon-arrow-repeat></b-icon-arrow-repeat></div>
-      <div @click="append('0')">0</div>
+      <div @click="append('0')" class="zero">0</div>
       <div @click="dot('.')" class="dot">.</div>
       <div @click="equal" class="nan">=</div>
     </div>
@@ -35,7 +39,9 @@ export default {
     return {
       // preoperand: '',
       formula: '',
-      equalClicked: false
+      equalClicked: false,
+      formulaHistory: [],
+      // percentaged: false
       // operator: null,
       // operatorClicked: false,
       // formulaEndNan: false
@@ -77,6 +83,7 @@ export default {
     },
     clear() {
       this.formula = ''
+      this.formulaHistory = []
       // this.equalClicked = false
       // this.operatorClicked = false
       // this.formulaEndNan = false
@@ -90,6 +97,10 @@ export default {
       this.equalClicked = false
     },
     dot(dot) {
+      if(this.equalClicked) {
+        this.formulaHistory.push(this.formula + '=' + this.result)
+        this.formula = '0.'
+      }
       if(this.formula === '') {
         this.formula = '0.'
       }
@@ -102,11 +113,26 @@ export default {
       this.formula = this.formula.slice(0, -1)
     },
     percentage() {
-      if(!this.operatorEnd(this.formula))
-        this.formula += '/100'
+      if(this.operatorEnd(this.formula)) return;
+      if(this.equalClicked) {
+        this.formulaHistory.push(this.formula + '=' + this.result)
+      }
+      // console.log(this.result)
+      let tmp = this.result / 100
+      // console.log(tmp)
+      this.formula = String(tmp)
+      // if(!this.operatorEnd(this.formula))
+      //   this.formula += '/100'
+      // console.log(this.result, this.formula)
+      // let tmp = this.result
+      // this.formula = String(tmp)
       this.equalClicked = false
     },
     divide() {
+      if(this.equalClicked) {
+        this.formulaHistory.push(this.formula + '=' + this.result)
+        this.formula = String(this.result)
+      }
       if(this.formula === '') {
         this.formula = '0' + String.fromCharCode(247)
       } else if(this.operatorEnd(this.formula)) {
@@ -117,6 +143,10 @@ export default {
       this.equalClicked = false
     },
     multiple() {
+      if(this.equalClicked) {
+        this.formulaHistory.push(this.formula + '=' + this.result)
+        this.formula = String(this.result)
+      }
       if(this.formula === '') {
         this.formula = '0' + String.fromCharCode(215)
       } else if(this.operatorEnd(this.formula)) {
@@ -127,6 +157,10 @@ export default {
       this.equalClicked = false
     },
     minus() {
+      if(this.equalClicked) {
+        this.formulaHistory.push(this.formula + '=' + this.result)
+        this.formula = String(this.result)
+      }
       if(this.formula === '') {
         this.formula = '0' + String.fromCharCode(8722)
       } else if(this.operatorEnd(this.formula)) {
@@ -137,6 +171,10 @@ export default {
       this.equalClicked = false
     },
     add() {
+      if(this.equalClicked) {
+        this.formulaHistory.push(this.formula + '=' + this.result)
+        this.formula = String(this.result)
+      }
       if(this.formula === '') {
         this.formula = '0+'
       } else if(this.operatorEnd(this.formula)) {
@@ -171,40 +209,76 @@ export default {
   .display {
     grid-column: 1 / 5;
     grid-row: 1 / 4;
+    /* display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 30px; */
     background-color: #332d2d;
     border-radius: 5px 5px 0 0;
-    margin-bottom: 1rem;
     position: relative;
+    overflow: auto;
+    width: 420px;
+    height: 260px;
+    /* justify-content: right; */
+    /* align-items: right; */
+    text-align: right;
+    padding-right: 30px;
   }
+  .history {
+    position: absolute;
+    bottom: 135px;
+    right: 30px;
+    font-size: 1rem;
+    color: #9E9E9E;
+    overflow: auto;
+    width: 420px;
+    height: 100px;
+    text-align: right;
+  }
+  .history > p {
+    margin-bottom: 2px;
+  }
+  /* .history > p:last-child {
+    scroll-snap-align: end;
+  } */
+    .formulaStyle {
+      position: absolute;
+      bottom: 60px;
+      right: 30px;
+      text-align: center;
+      color: #9E9E9E;
+    }
+    .resultStyle {
+      position: absolute;
+      bottom: 0;
+      right: 30px;
+      text-align: center;
+      color: #9E9E9E;
+    }
 
   .keyboard {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: minmax(90px, auto);
+    grid-auto-rows: minmax(80px, auto);
     width: 420px;
     align-items: center;
   }
-  .formulaStyle {
-    position: absolute;
-    bottom: 60px;
-    right: 0;
-    text-align: center;
-    color: #9E9E9E;
+  .keyboard > div:hover {
+    background-color: #888;
+    padding: 18px 18px 18px 18px;
+    border-radius: 50%;
   }
-  .resultStyle {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    text-align: center;
-    color: #9E9E9E;
+
+  .zero {
+    grid-column: 1 / 3;
   }
+  .zero:hover {
+    border-radius: 0px;
+    padding: 0;
+  }
+
   .nan {
     /* background-color: orange; */
     color: orange;
-  }
-
-  .transform {
-    cursor: pointer;
   }
 
   .focusOn {
