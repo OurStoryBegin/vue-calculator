@@ -84,6 +84,9 @@ export default {
     },
     reverseLogs() {
       return this.formulaHistory.slice().reverse()
+    },
+    exceedMaxInput() {
+      return this.formula.length > 15
     }
   },
   // filters: {
@@ -113,6 +116,7 @@ export default {
       // this.formulaEndNan = false
     },
     append(operand) {
+      if(this.exceedMaxInput) return
       if(this.equalClicked) {
         this.formulaHistory.push(this.formula + '=' + this.result)
         this.formula = ''
@@ -127,6 +131,7 @@ export default {
       this.equalClicked = false
     },
     dot(dot) {
+      if(this.exceedMaxInput) return
       if(this.equalClicked) {
         this.formulaHistory.push(this.formula + '=' + this.result)
         this.formula = '0.'
@@ -160,6 +165,7 @@ export default {
       this.equalClicked = false
     },
     divide() {
+      if(this.exceedMaxInput) return
       if(this.equalClicked) {
         this.formulaHistory.push(this.formula + '=' + this.result)
         this.formula = String(this.result)
@@ -174,6 +180,7 @@ export default {
       this.equalClicked = false
     },
     multiple() {
+      if(this.exceedMaxInput) return
       if(this.equalClicked) {
         this.formulaHistory.push(this.formula + '=' + this.result)
         this.formula = String(this.result)
@@ -188,6 +195,7 @@ export default {
       this.equalClicked = false
     },
     minus() {
+      if(this.exceedMaxInput) return
       if(this.equalClicked) {
         this.formulaHistory.push(this.formula + '=' + this.result)
         this.formula = String(this.result)
@@ -202,6 +210,7 @@ export default {
       this.equalClicked = false
     },
     add() {
+      if(this.exceedMaxInput) return
       if(this.equalClicked) {
         this.formulaHistory.push(this.formula + '=' + this.result)
         this.formula = String(this.result)
@@ -232,9 +241,10 @@ export default {
     /* align-items: center; */
     width: 420px;
     margin: 0 auto;
-    background-color: #eee;
+    background-color: #444;
     font-size: 1.8rem;
-    border-radius: 5px;
+    border-radius: 25px;
+    box-shadow: 5px 5px 12px 3px #111;
   }
 
   .display {
@@ -244,7 +254,7 @@ export default {
     grid-template-columns: 1fr;
     grid-auto-rows: 30px; */
     background-color: #332d2d;
-    border-radius: 5px 5px 0 0;
+    border-radius: 25px 25px 0 0;
     position: relative;
     overflow: auto;
     width: 420px;
@@ -273,9 +283,10 @@ export default {
   } */
     .formulaStyle {
       position: absolute;
+      width: 420px;
       bottom: 60px;
       right: 30px;
-      text-align: center;
+      /* text-align: center; */
       color: #9E9E9E;
     }
     .resultStyle {
@@ -292,7 +303,9 @@ export default {
     grid-auto-rows: minmax(80px, auto);
     width: 420px;
     align-items: center;
+    color: white;
   }
+
   .keyboard > div:hover {
     background-color: #888;
     padding: 18px 18px 18px 18px;
